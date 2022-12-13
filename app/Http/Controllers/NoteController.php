@@ -85,6 +85,29 @@ class NoteController extends BaseController
     public function update(Request $request, Note $note)
     {
         //
+        try {
+            if ($request->title != $note->title) {
+                # code...
+                $validator = Validator::make($request->all(), [
+                    'title' => 'required|string|unique:notes',
+                    'description' => 'required',
+                ]);
+    
+                if ($validator->fails()) {
+    
+                    return $this->sendError("Invalid Field", $validator->errors(), 400);
+                }
+            }
+
+            $note->title = $request->title;
+            $note->description = $request->description;
+            $note->save();
+
+            return $this->sendResponse($note, "Note" . $note->id . "Updated Successfully");
+        } catch (Exception $errors) {
+
+            return $this->sendError($errors->getMessage(), $errors, 500);
+        }
     }
 
     /**
