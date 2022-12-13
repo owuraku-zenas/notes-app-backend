@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Note;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class NoteController extends BaseController
 {
@@ -20,7 +21,6 @@ class NoteController extends BaseController
             $notes = Note::all();
 
             return $this->sendResponse($notes, "Notes Retrieved Successfully");
-            
         } catch (Exception $exception) {
             return $this->sendError($exception->getMessage(), $exception, 500);
         }
@@ -56,6 +56,12 @@ class NoteController extends BaseController
     public function show(Note $note)
     {
         //
+        try {
+            return $this->sendResponse($note, "Note" . $note->id . "Retrieved Successfully");
+        } catch (Exception $exception) {
+
+            return $this->sendError($exception->getMessage(), $exception, 500);
+        }
     }
 
     /**
@@ -90,5 +96,12 @@ class NoteController extends BaseController
     public function destroy(Note $note)
     {
         //
+        try {
+            $note->delete();
+            return $this->sendResponse($note, "Note" . $note->id . "Deleted Successfully");
+        } catch (Exception $exception) {
+
+            return $this->sendError($exception->getMessage(), $exception, 500);
+        }
     }
 }
