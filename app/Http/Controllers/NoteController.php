@@ -49,7 +49,6 @@ class NoteController extends BaseController
 
             $validator = Validator::make($request->all(), [
                 'title' => 'required|string|unique:notes',
-                'description' => 'required',
             ]);
 
             if ($validator->fails()) {
@@ -58,7 +57,6 @@ class NoteController extends BaseController
             }
             $note = new Note;
             $note->title = $request->title;
-            $note->description = $request->description;
             $note->save();
 
             return $this->sendResponse($note, "Note" . $note->id . "Updated Successfully");
@@ -111,7 +109,7 @@ class NoteController extends BaseController
                 # code...
                 $validator = Validator::make($request->all(), [
                     'title' => 'required|string|unique:notes',
-                    'description' => 'required',
+                    'description' => 'string',
                 ]);
 
                 if ($validator->fails()) {
